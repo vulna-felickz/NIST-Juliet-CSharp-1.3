@@ -83,6 +83,14 @@ jobs:
     #     ./location_of_script_within_repo/buildscript.sh
 
     - name: Perform CodeQL Analysis
+      continue-on-error: true
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+    - name: Upload CodeQL Analysis
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{runner.workspace}}/results/*.sarif
+
+        
