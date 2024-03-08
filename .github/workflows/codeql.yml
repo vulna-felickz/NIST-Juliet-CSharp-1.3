@@ -20,8 +20,8 @@ on:
     - cron: '33 13 * * 1'
     
 # buildless: set "feature flags"
-env:
-  CODEQL_EXTRACTOR_CSHARP_OPTION_BUILDLESS: true
+# env:
+#   CODEQL_EXTRACTOR_CSHARP_OPTION_BUILDLESS: true
   
 jobs:
   analyze:
@@ -44,12 +44,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp' ]
-        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
-        # Use only 'java-kotlin' to analyze code written in Java, Kotlin or both
-        # Use only 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
-
+        include:
+        # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
+        - language: csharp
+          build-mode: none
+        # # Analyzes C and C++ code
+        # - language: c-cpp
+        #   build-mode: autobuild
+        # # Analyzes Go code
+        # - language: go
+        #   build-mode: autobuild
+        # # Analyzes Java code (not including Kotlin)
+        # - language: java-kotlin
+        #   build-mode: none # analyzes Java only by default, set this to autobuild or manual to analyze Kotlin too
+        # # Analyzes JavaScript and TypeScript code
+        # - language: javascript-typescript
+        #   build-mode: none          
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -59,6 +70,7 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
         # If you wish to specify custom queries, you can do so here or in a config file.
         # By default, queries listed here will override any specified in a config file.
         # Prefix the list here with "+" to use these queries and those in the config file.
