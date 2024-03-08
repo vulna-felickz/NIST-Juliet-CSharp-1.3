@@ -19,9 +19,9 @@ on:
   schedule:
     - cron: '33 13 * * 1'
     
-# buildless: set "feature flags"
-# env:
-#   CODEQL_EXTRACTOR_CSHARP_OPTION_BUILDLESS: true
+# buildless: set "feature flags" for csharp while: A fatal error occurred: C# does not support the none build mode. Please try using one of the following build modes instead: autobuild, manual. See the logs for more details.
+env:
+   CODEQL_EXTRACTOR_CSHARP_OPTION_BUILDLESS: true
   
 jobs:
   analyze:
@@ -47,7 +47,8 @@ jobs:
         include:
         # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
         - language: csharp
-          build-mode: none
+        #  build-mode: none
+        
         # # Analyzes C and C++ code
         # - language: c-cpp
         #   build-mode: autobuild
@@ -70,12 +71,7 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
-
-        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        #build-mode: ${{ matrix.build-mode }}
         queries: security-extended
 
 
